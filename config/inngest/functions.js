@@ -1,59 +1,42 @@
-import { Inngest } from "inngest";
-import connectDB from "./connectDB";
+import { inngest } from "./client";
+import connectDB from "../connectDB";
 import User from "@/models/User";
 
-// Create a client to send and receive events
-export const inngest = new Inngest({ id: "quickCart-next" });
-
-// inngest function to save user to database
 export const syncUserCreation = inngest.createFunction(
-  {
-    id: "sync-user-from-clerk",
-  },
-  {
-    event: "clerk/user.created",
-  },
+  { id: "sync-user-from-clerk" },
+  { event: "clerk/user.created" },
   async ({ event }) => {
     const { id, first_name, last_name, email_address, image_url } = event.data;
     const userData = {
       _id: id,
       email: email_address[0].email_address,
-      name: first_name + " " + last_name,
-      image_url: image_url,
+      name: `${first_name} ${last_name}`,
+      image_url,
     };
     await connectDB();
     await User.create(userData);
   }
 );
 
-// inngest function to update user to database
 export const syncUserUpdate = inngest.createFunction(
-  {
-    id: "update-user-with-clerk",
-  },
-  {
-    event: "clerk/user.updated",
-  },
+  { id: "update-user-with-clerk" },
+  { event: "clerk/user.updated" },
   async ({ event }) => {
     const { id, first_name, last_name, email_address, image_url } = event.data;
     const userData = {
       _id: id,
-      id,
       email: email_address[0].email_address,
-      name: first_name + " " + last_name,
-      image_url: image_url,
+      name: `${first_name} ${last_name}`,
+      image_url,
     };
     await connectDB();
     await User.findByIdAndUpdate(id, userData);
   }
 );
 
-// inngest function to delete user from database
 export const syncUserDeletion = inngest.createFunction(
   { id: "delete-user-with-clerk" },
-  {
-    event: "clerk/user.deleted",
-  },
+  { event: "clerk/user.deleted" },
   async ({ event }) => {
     const { id } = event.data;
     await connectDB();

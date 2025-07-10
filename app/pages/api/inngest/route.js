@@ -1,10 +1,10 @@
 import { serve } from "inngest/next";
+import { inngest } from "@/config/inngest/client"; // just the client
 import {
-  inngest,
   syncUserCreation,
   syncUserDeletion,
   syncUserUpdate,
-} from "@/config/inngest";
+} from "@/config/inngest/functions"; // import functions separately
 
 export const { GET, POST, PUT } = serve({
   client: inngest,
