@@ -96,13 +96,6 @@ const Navbar = () => {
               </UserButton.MenuItems>
               <UserButton.MenuItems>
                 <UserButton.Action
-                  label="  "
-                  labelIcon={<CartIcon />}
-                  onClick={() => router.push("/cart")}
-                />
-              </UserButton.MenuItems>
-              <UserButton.MenuItems>
-                <UserButton.Action
                   label="Cart"
                   labelIcon={<CartIcon />}
                   onClick={() => router.push("/cart")}
